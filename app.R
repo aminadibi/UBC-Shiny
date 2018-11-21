@@ -42,7 +42,7 @@ server <- function(input, output) {
        addProviderTiles(providers$CartoDB.Positron) %>%
        addPolygons()
      
-     bins <- c(0, 30000,40000, 50000,60000, 70000,80000, 90000,100000, 110000, Inf)
+     bins <- c(0, 30000, 40000, 50000,60000, 70000, 80000, 90000,100000, 110000, Inf)
      pal <- colorBin("RdYlBu", bins = bins)
      leaflet(df_vancouver) %>% 
        addProviderTiles(providers$CartoDB.Positron) %>%
