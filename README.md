@@ -1,9 +1,8 @@
----
-title: "Shiny Tutorial for UBC R Meeting"
-author: "amin adibi"
-date: "November 20, 2018"
-output: html_document
----
+
+# Shiny Tutorial for UBC R Meeting
+By: Amin Adibi
+
+
 
 ## Welcome to Shiny
 
