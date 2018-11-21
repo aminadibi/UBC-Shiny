@@ -159,6 +159,19 @@ leaflet(vancouver) %>%
             opacity = 1)
 ```
 
+### Three Simple Rule of Shiny(ing)
+
+When coding the server part of a Shiny app, it is important to remember that, 
+
+1. inputs defined in the UI can be accessed with `input$[InputID]`
+2. outputs defined in the UI can be accessed with `output$[OutputtID]`
+3. outputs are generally assigned to reactive `render` functions, depending on the type. For example, `renderText` `renderPlot` or `renderLeaflet`.
+
+### Reactivity 
+
+Shiny apps are reactive, meaning that they can respond to certain changes in input variables. Reactivity is both the coolest and the most complex aspect of Shiny programming. It's this reactive nature that can make debugging way more painful. An example of a reactive part of the code is all `render*` functions. For instance, if you use `input$slidebar` in a `renderText` output, the code will be re-evaluated every time the value of `input$slidebar` is changed by the user. 
+
+
 ### Putting it all together
 
 Here's our complete web app code:
@@ -231,3 +244,8 @@ shinyApp(ui = ui, server = server)
 
 Once you have created your shiny app, you probably want to ship to your end-users. There are many options, but the most convinient one would be to host it on RStudio's Shiny server, Shinyapps.io. Hosting is free up to a certain traffic. Other convinient options include hosting it on your very own Linux server using Shiny Server (which is free) or its commercial version Shiny Server Pro (expensive). 
 
+
+### More Resources
+
+1. https://shiny.rstudio.com/tutorial/
+2. https://deanattali.com/blog/building-shiny-apps-tutorial/
