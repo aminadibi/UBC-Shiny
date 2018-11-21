@@ -87,7 +87,7 @@ All Shiny apps have two components:
 The user-interface (ui) script controls the look of your app. The server script contains the back-end of the app. 
 Shiny "widgets" can be used to customize the input in the ui: https://shiny.rstudio.com/gallery/widget-gallery.html
 
-### CanCensus
+### CanCensus Vancouver Income Data
 
 Census data is provided by Statistics Canada and can be accessed through the (proudly!) made-in-Vancouver package `cancensus` https://mountainmath.github.io/cancensus/index.html. 
 
@@ -110,10 +110,54 @@ ggplot(vancouver) + geom_sf(aes(fill = median_hh_income), colour = "grey") +
   labs(title = "Median Household Income", subtitle = "Vancouver Census Subdivisions, 2016 Census")
 ```
 
+### Load the dataset
+
+The file containing our dataset `vancouver.rds` can found at https://github.com/aminadibi/UBC-Shiny/tree/master. Download the file and copy it to your project folder. Now you can import the dataset using the following command:
+```
+vancouver <- readRDS("./vancouver.rds")
+```
+
+### Visualize with ggplot
+
+The reactive nature of Shiny makes debugging a little bit more difficult. So, before jumping into creating the Shiny app, it might not be bad idea to try to visualize the data using a simple RScript. Let's start with ggplot first:
+
+```
+library(ggplot2)
+ggplot(vancouver) + geom_sf(aes(fill = median_hh_income), colour = "grey") +
+  scale_fill_viridis_c("Median HH Income", labels = scales::dollar) + theme_minimal() +
+  theme(panel.grid = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank()) + 
+  coord_sf(datum=NA) +
+  labs(title = "Median Household Income", subtitle = "Vancouver Census Subdivisions, 2016 Census")
+```
+
 ### Visualization with Leaflet
 
 Leaflet is a Java Script library for interactive maps, and can be intergrated with Shiny through its R package. You can learn more about Leaflet here: https://leafletjs.com/
 
+With Leaflet, we can create interactive maps superimposed on navigatable Google-Map-style maps. Let's give this a try: 
+
+```
+library(leaflet)
+leaflet(vancouver) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons()
+
+bins <- c(0, 30000,40000, 50000,60000, 70000,80000, 90000,100000, 110000, Inf)
+pal <- colorBin("RdYlBu", domain = vancouver$v_CA16_2397, bins = bins)
+leaflet(vancouver) %>% 
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(fillColor = ~pal(median_hh_income),
+              color = "white",
+              weight = 1,
+              opacity = 1,
+              fillOpacity = 0.65) %>% 
+  addLegend("topright", pal = pal, values = ~median_hh_income,
+            title = "Median Household Income (2016)",
+            labFormat = labelFormat(prefix = "$"),
+            opacity = 1)
+```
 
 ### Putting it all together
 
